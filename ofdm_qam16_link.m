@@ -5,7 +5,7 @@ bits_per_symbol = log2(modulation_order);
 snr = 15;
 
 % spectrum analyzer
-scope = dsp.SpectrumAnalyzer("NumInputPorts", 2, "ViewType", "Spectrum and spectrogram",...
+spectrum_analyzer = dsp.SpectrumAnalyzer("NumInputPorts", 2, "ViewType", "Spectrum and spectrogram",...
     "SampleRate", 10000, "FrequencySpan", "Span and center frequency", "Span", 10e3);
 
 % ofdm modulator/demodulator
