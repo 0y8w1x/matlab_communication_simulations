@@ -4,18 +4,6 @@ bits_per_symbol = log2(modulation_order);
 % signal to noise ratio in db
 snr = 15;
 
-% number of ofdm symbols
-number_of_frames = 10000;
-% size of one ofdm symbol
-frame_size = 96;
-% number of bits to be transmitted
-num_bits = number_of_frames * frame_size;
-% data to be transmitted as bits
-data = randi([0 1], num_bits, 1);
-
-constraint_length = 3;
-trellis_structure = poly2trellis(constraint_length, [6, 7]);
-
 % spectrum analyzer
 scope = dsp.SpectrumAnalyzer("NumInputPorts", 2, "ViewType", "Spectrum and spectrogram",...
     "SampleRate", 10000, "FrequencySpan", "Span and center frequency", "Span", 10e3);
@@ -25,13 +13,27 @@ ofdm_modulator = comm.OFDMModulator("FFTLength", 64, ...
     "NumGuardBandCarriers", [6; 5], "InsertDCNull", true, "PilotInputPort", 1,...
     "PilotCarrierIndices", [12; 26; 40; 54], "CyclicPrefixLength", 16);
 ofdm_demodulator = comm.OFDMDemodulator(ofdm_modulator);
-
 ofdm_dims = info(ofdm_modulator);
 showResourceMapping(ofdm_modulator);
 
+% convolutional code structure
+constraint_length = 3;
+trellis_structure = poly2trellis(constraint_length, [6, 7]);
+
+% number of ofdm symbols
+number_of_frames = 10000;
+% size of one ofdm symbol
+frame_size = 96;
+% number of bits to be transmitted
+num_bits = number_of_frames * frame_size;
+% data to be transmitted as bits
+data = randi([0 1], num_bits, 1);
+
+% sattistics
 worst_ber = 0;
 ber_summation = 0;
 cnt = 1;
+
 for i = 1:(num_bits/frame_size)
     data_frame = data(cnt:cnt+frame_size-1);
     cnt = cnt + frame_size;
