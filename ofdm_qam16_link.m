@@ -1,3 +1,6 @@
+clear;
+clc;
+
 % qam properties
 modulation_order = 16;
 bits_per_symbol = log2(modulation_order);
@@ -21,7 +24,7 @@ constraint_length = 3;
 trellis_structure = poly2trellis(constraint_length, [6, 7]);
 
 % number of ofdm symbols
-number_of_frames = 10000;
+number_of_frames = 1000;
 % size of one ofdm symbol
 frame_size = 96;
 % number of bits to be transmitted
@@ -57,7 +60,7 @@ for i = 1:(num_bits/frame_size)
     % channel impairment
     channel_impaired_signal = awgn(ofdm_modulated_signal, snr, "measured");
     % visualize frequency spectrum
-    scope(ofdm_modulated_signal, channel_impaired_signal);
+    spectrum_analyzer(ofdm_modulated_signal, channel_impaired_signal);
     
     % ofdm demodulation
     [ofdm_demodulated_signal, pilot_symbols_out] = ofdm_demodulator(channel_impaired_signal);
