@@ -29,7 +29,7 @@ num_bits = number_of_frames * frame_size;
 % data to be transmitted as bits
 data = randi([0 1], num_bits, 1);
 
-% sattistics
+% statistics
 worst_ber = 0;
 ber_summation = 0;
 cnt = 1;
@@ -63,8 +63,8 @@ for i = 1:(num_bits/frame_size)
     [ofdm_demodulated_signal, pilot_symbols_out] = ofdm_demodulator(channel_impaired_signal);
     
     % qam demodulation
-    qam_demodulated_signal = qamdemod(ofdm_demodulated_signal, modulation_order, "UnitAveragePower", 1);
-    binary_data = de2bi(qam_demodulated_signal');
+    qam_demodulated_data = qamdemod(ofdm_demodulated_signal, modulation_order, "UnitAveragePower", 1);
+    binary_data = de2bi(qam_demodulated_data');
     
     % deinterleave data
     deinterleaved_data = matdeintrlv(binary_data', 2, 2)';
