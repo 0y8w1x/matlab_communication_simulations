@@ -80,5 +80,5 @@ for i = 1:(num_bits/frame_size)
     end
 end
 
-disp("average BER: " + round(ber_summation/(num_bits/96)*100, 1) + "%");
-disp("worst BER: " + round(worst_ber*100, 1) + "%");
+disp("average BER: " + round(ber_summation/(num_bits/frame_size)*100, 2) + "%");
+disp("worst BER: " + round(worst_ber*100, 2) + "%");
