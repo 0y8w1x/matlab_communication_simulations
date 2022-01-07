@@ -1,11 +1,8 @@
-% notes
-% given: input size = n
-% follows: coded data size = 2*n
-% follows: modulated data = 2*n / bits per symbol (e.g. 4 would result in size of n/2)
-
-% general properties
+% qam properties
 modulation_order = 16;
 bits_per_symbol = log2(modulation_order);
+% signal to noise ratio in db
+snr = 15;
 
 % number of ofdm symbols
 number_of_frames = 10000;
@@ -35,9 +32,9 @@ showResourceMapping(ofdm_modulator);
 worst_ber = 0;
 ber_summation = 0;
 cnt = 1;
-for i = 1:(num_bits/96)
-    data_frame = data(cnt:cnt+95);
-    cnt = cnt + 96;
+for i = 1:(num_bits/frame_size)
+    data_frame = data(cnt:cnt+frame_size-1);
+    cnt = cnt + frame_size;
     
     % convolutional encode the data frame with viterbi
     encoded_data = convenc(data_frame, trellis_structure);
@@ -55,8 +52,6 @@ for i = 1:(num_bits/96)
     pilot_symbols_in = complex(rand(ofdm_dims.PilotInputSize),rand(ofdm_dims.PilotInputSize));
     ofdm_modulated_signal = ofdm_modulator(qam_modulated_signal, pilot_symbols_in);
     
-    % signal to noise ratio in db
-    snr = 15;
     % channel impairment
     channel_impaired_signal = awgn(ofdm_modulated_signal, snr, "measured");
     % visualize frequency spectrum
